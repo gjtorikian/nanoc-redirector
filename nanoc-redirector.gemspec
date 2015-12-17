@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'nanoc', '4.1.0rc1'
 
-  spec.add_development_dependency 'bundler', '~> 1.10'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'minitest', '~> 5.8'
   spec.add_development_dependency 'awesome_print'
