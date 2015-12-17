@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+require 'nanoc-redirector'
+
+preprocess do
+end
+
+ignore '/**/*.html'
+
+compile '/**/*.md' do
+  if @item[:redirect_to]
+    filter :redirect_to, { :redirect_to => @item[:redirect_to] }
+  else
+    layout '/default.*'
+  end
+end
+
+route '/**/*.md' do
+  item.identifier.without_ext + '/index.html'
+end
+
+route '/**/*' do
+  item.identifier.to_s
+end
+
+layout '/**/*', :erb
+
+postprocess do
+  @items.each do |item|
+    NanocRedirector::RedirectFrom.process(item, item.path(rep: :default))
+  end
+end
