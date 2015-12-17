@@ -1,8 +1,10 @@
-# Nanoc::Redirector
+# Nanoc-Redirector
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/nanoc/redirector`. To experiment with that code, run `bin/console` for an interactive prompt.
+This plugin implements client-side redirects _from_ and _to_ other generated pages. It's pretty close in functionality to Jekyll's [redirect-from](https://github.com/jekyll/jekyll-redirect-from) plugin.
 
-TODO: Delete this and the text above, and describe your gem
+Redirects are performed by serving an HTML file with an HTTP-REFRESH meta
+tag which points to your destination. No `.htaccess` file, nginx conf, xml
+file, or anything else will be generated. It simply creates HTML files.
 
 ## Installation
 
@@ -22,15 +24,65 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The object of this gem is to allow an author to specify multiple URLs for a
+page, such that the alternative URLs redirect to the new URL.
 
-## Development
+To use it, simply add a string or array to the YAML front-matter of your page:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Redirect From
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+``` yaml
+title: My amazing post
+redirect_from:
+  - /post/123456789/
+  - /post/123456789/my-amazing-post/
+```
 
-## Contributing
+For example, this frontmatter will generate two pages in the following destinations:
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/nanoc-redirector.
+```
+/post/123456789/
+/post/123456789/my-amazing-post/
+```
 
+Each will point to wherever `My amazing post` is routed to.
+
+You can also specify just one url like this:
+
+```text
+title: My other awesome post
+redirect_from: /post/123456798/
+```
+
+You can implement this functionality by calling `NanocRedirector::RedirectFrom.process` anywhere in your Rules file. You must pass in the item to redirect to, as well as its destination. For example:
+
+``` ruby
+postprocess do
+  REPS.each do |rep|
+    @items.each do |item|
+      NanocRedirector::RedirectFrom.process(item, item.path(rep: rep))
+    end
+  end
+end
+```
+
+### Redirect To filter
+
+Sometimes, you may want to redirect a site page to a totally different website. This plugin also supports that with the `redirect_to` key:
+
+``` yaml
+title: My amazing post
+redirect_to:
+  - http://www.github.com
+```
+
+If you have multiple `redirect_to`s set, only the first one will be respected.
+
+You can implement this functionality by adding a filter to your compile step:
+
+``` ruby
+compile '/**/*.md' do
+  filter :redirect_to, { :redirect_to => @item[:redirect_to] }
+  layout '/default.*'
+end
+```

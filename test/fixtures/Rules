@@ -7,11 +7,8 @@ end
 ignore '/**/*.html'
 
 compile '/**/*.md' do
-  if @item[:redirect_to]
-    filter :redirect_to, { :redirect_to => @item[:redirect_to] }
-  else
-    layout '/default.*'
-  end
+  filter :redirect_to, { :redirect_to => @item[:redirect_to] }
+  layout '/default.*'
 end
 
 route '/**/*.md' do
