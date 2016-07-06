@@ -17,10 +17,8 @@ module NanocRedirector
         redirects.each do |redirect|
           content = NanocRedirector.redirect_template(dest)
           dir = "output/#{redirect}"
-          unless File.directory?(dir)
-            FileUtils.mkdir_p(dir)
-            File.write("#{dir}/index.html", content)
-          end
+          FileUtils.mkdir_p(dir) unless File.directory?(dir)
+          File.write("#{dir}/index.html", content) unless File.exist? "#{dir}/index.html"
         end
       end
     end
