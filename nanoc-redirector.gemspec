@@ -5,7 +5,7 @@ require 'version'
 Gem::Specification.new do |spec|
   spec.name          = 'nanoc-redirector'
   spec.version       = NanocRedirector::VERSION
-  spec.authors       = %w(Garen Torikian)
+  spec.authors       = 'Garen J. Torikian'
   spec.email         = %w(gjtorikian@gmail.com)
 
   spec.summary       = %w(Allows you to generate redirects to and from an item.)
