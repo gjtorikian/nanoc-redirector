@@ -36,4 +36,15 @@ class RedirectFromTest < MiniTest::Test
       assert_includes output_file, 'redirect_from/array'
     end
   end
+
+  def test_it_does_not_clobber_existing_files
+    with_site(name: FIXTURES_DIR) do |site|
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compile
+
+      output_file = read_output_file('redirect_from', 'existing-content')
+      test_file = read_test_file('redirect_from', 'existing-content')
+      assert_equal output_file, test_file
+    end
+  end
 end
