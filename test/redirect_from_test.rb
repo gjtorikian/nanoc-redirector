@@ -54,7 +54,7 @@ class RedirectFromTest < MiniTest::Test
       site.compile
 
       nested_redirect_file = read_output_file('redirect_from', 'nested')
-      assert_includes nested_redirect_file 'redirect_from/from-nested-root'
+      assert_includes nested_redirect_file, 'redirect_from/from-nested-root'
     end
   end
 end
