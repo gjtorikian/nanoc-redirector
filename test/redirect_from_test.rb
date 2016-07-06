@@ -47,4 +47,14 @@ class RedirectFromTest < MiniTest::Test
       assert_equal output_file, test_file
     end
   end
+
+  def test_it_allows_redirects_from_content_directory_indexes
+    with_site(name: FIXTURES_DIR) do |site|
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compile
+
+      nested_redirect_file = read_output_file('redirect_from', 'nested')
+      assert_includes nested_redirect_file 'redirect_from/from-nested-root'
+    end
+  end
 end
