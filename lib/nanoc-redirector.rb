@@ -16,9 +16,10 @@ module NanocRedirector
       redirect_hash.values.each do |redirects|
         redirects.each do |redirect|
           content = NanocRedirector.redirect_template(dest)
-          dir = "output/#{redirect}"
+          dir = File.join("output", redirect)
+          redirect_path = File.join(dir, "index.html")
           FileUtils.mkdir_p(dir) unless File.directory?(dir)
-          File.write("#{dir}/index.html", content) unless File.exist? "#{dir}/index.html"
+          File.write(redirect_path, content) unless File.exist? redirect_path
         end
       end
     end
