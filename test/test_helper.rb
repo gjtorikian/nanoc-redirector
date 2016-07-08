@@ -13,7 +13,7 @@ class Minitest::Test
 end
 
 def test_output_file(*dir)
-  File.exists?(File.join('output', dir, 'index.html'))
+  File.exist?(File.join('output', dir, 'index.html'))
 end
 
 def read_output_file(*dir)
