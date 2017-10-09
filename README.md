@@ -58,10 +58,8 @@ You can implement this functionality by calling `NanocRedirector::RedirectFrom.p
 
 ``` ruby
 postprocess do
-  REPS.each do |rep|
-    @items.each do |item|
-      NanocRedirector::RedirectFrom.process(item, item.path(rep: rep))
-    end
+  @items.each do |item|
+    NanocRedirector::RedirectFrom.process(item, item.path)
   end
 end
 ```
