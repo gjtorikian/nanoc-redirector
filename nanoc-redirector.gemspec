@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = NanocRedirector::VERSION
   spec.authors       = 'Garen J. Torikian'
   spec.email         = %w(gjtorikian@gmail.com)
+  spec.licenses      = ['MIT']
 
   spec.summary       = %w(Allows you to generate redirects to and from an item.)
   spec.homepage      = 'https://www.github.com/gjtorikian/nanoc-redirector'
