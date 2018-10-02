@@ -59,7 +59,7 @@ You can implement this functionality by calling `NanocRedirector::RedirectFrom.p
 ``` ruby
 postprocess do
   @items.each do |item|
-    NanocRedirector::RedirectFrom.process(item, item.path)
+    NanocRedirector::RedirectFrom.process(item, item.identifier.without_ext, @config)
   end
 end
 ```
