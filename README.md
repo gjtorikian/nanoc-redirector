@@ -57,6 +57,8 @@ redirect_from: /post/123456798/
 You can implement this functionality by calling `NanocRedirector::RedirectFrom.process` anywhere in your Rules file. You must pass in the item to redirect to, as well as its destination. For example:
 
 ``` ruby
+require 'nanoc-redirector'
+
 postprocess do
   @items.each do |item|
     NanocRedirector::RedirectFrom.process(item, item.path)
