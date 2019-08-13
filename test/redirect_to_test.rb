@@ -5,7 +5,7 @@ class RedirectFromTest < MiniTest::Test
     with_site(name: FIXTURES_DIR) do |site|
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       output_file = read_output_file('redirect_from', 'string')
       test_file = read_test_file('redirect_from', 'string')
@@ -21,7 +21,7 @@ class RedirectFromTest < MiniTest::Test
     with_site(name: FIXTURES_DIR) do |site|
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       output_file = read_output_file('redirect_from', 'array')
       test_file = read_test_file('redirect_from', 'array')
