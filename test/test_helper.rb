@@ -5,10 +5,11 @@ require 'minitest/autorun'
 require 'minitest/pride'
 
 FIXTURES_DIR = File.join(Dir.pwd, 'test', 'fixtures')
-CONFIG = YAML.load_file(File.join(FIXTURES_DIR, 'nanoc.yaml'))
+STANDARD_CONFIG = YAML.load_file(File.join(FIXTURES_DIR, 'standard_nanoc.yaml'))
 
 class Minitest::Test
   FileUtils.rm_rf File.join(FIXTURES_DIR, 'output')
+  FileUtils.rm_rf File.join(FIXTURES_DIR, 'somewhere')
   FileUtils.rm_rf File.join(FIXTURES_DIR, 'tmp')
 end
 
@@ -16,8 +17,16 @@ def test_output_file(*dir)
   File.exist?(File.join('output', dir, 'index.html'))
 end
 
+def test_somewhere_file(*dir)
+  File.exist?(File.join('somewhere', dir, 'index.html'))
+end
+
 def read_output_file(*dir)
   File.read(File.join('output', *dir, 'index.html')).gsub(/^\s*$/, '')
+end
+
+def read_somewhere_file(*dir)
+  File.read(File.join('somewhere', *dir, 'index.html')).gsub(/^\s*$/, '')
 end
 
 def read_test_file(dir, name)
@@ -33,45 +42,29 @@ def with_site(params = {})
     @site_num += 1
   end
 
-  # Build rules
-  rules_content = <<EOS
-compile '*' do
-{{compilation_rule_content}}
-end
-route '*' do
-if item.binary?
-  item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
-else
-  item.identifier + 'index.html'
-end
-end
-layout '*', :erb
-EOS
-  rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
+  output_dir = params[:output_dir] || 'output'
+  index_filenames = params[:index_filenames] || ['index.html']
+
 
   # Create site
-  unless File.directory?(site_name)
-    FileUtils.mkdir_p(site_name)
-    FileUtils.cd(site_name) do
-      FileUtils.mkdir_p('content')
-      FileUtils.mkdir_p('layouts')
-      FileUtils.mkdir_p('lib')
-      FileUtils.mkdir_p('output')
+  FileUtils.mkdir_p(site_name)
+  FileUtils.cd(site_name) do
+    FileUtils.mkdir_p('content')
+    FileUtils.mkdir_p('layouts')
+    FileUtils.mkdir_p('lib')
+    FileUtils.mkdir_p(output_dir)
 
-      if params[:has_layout]
-        File.open('layouts/default.html', 'w') do |io|
-          io.write('... <%= @yield %> ...')
-        end
+    if params[:has_layout]
+      File.open('layouts/default.html', 'w') do |io|
+        io.write('... <%= @yield %> ...')
       end
+    end
 
-      File.open('nanoc.yaml', 'w') do |io|
-        io << 'string_pattern_type: legacy' << "\n"
-        io << 'data_sources:' << "\n"
-        io << '  -' << "\n"
-        io << '    type: filesystem' << "\n"
-        io << '    identifier_type: legacy' << "\n"
-      end
-      File.open('Rules', 'w') { |io| io.write(rules_content) }
+    config = STANDARD_CONFIG
+    config["output_dir"] = output_dir
+    config["index_filenames"] = index_filenames
+    File.open('nanoc.yaml', 'w') do |io|
+      io.write config.to_yaml
     end
   end
 

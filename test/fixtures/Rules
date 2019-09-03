@@ -23,6 +23,6 @@ layout '/**/*', :erb
 
 postprocess do
   @items.each do |item|
-    NanocRedirector::RedirectFrom.process(item, item.path(rep: :default))
+    NanocRedirector::RedirectFrom.process(item, item.path(rep: :default), @config)
   end
 end
