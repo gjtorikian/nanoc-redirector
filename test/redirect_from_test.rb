@@ -57,4 +57,19 @@ class RedirectFromTest < MiniTest::Test
       assert_includes nested_redirect_file, 'redirect_from/from-nested-root'
     end
   end
+
+  def test_it_accepts_config_values
+    with_site(name: FIXTURES_DIR, output_dir: 'somewhere') do |site|
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      Nanoc::Int::Compiler.compile(site)
+
+      output_file = read_somewhere_file('redirect_from', 'string')
+      test_file = read_test_file('redirect_from', 'string')
+      assert_equal output_file, test_file
+
+      assert test_somewhere_file(['here', 'is-a-place'])
+      output_file = read_somewhere_file(['here', 'is-a-place'])
+      assert_includes output_file, 'redirect_from/string'
+    end
+  end
 end

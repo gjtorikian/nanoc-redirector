@@ -61,10 +61,17 @@ require 'nanoc-redirector'
 
 postprocess do
   @items.each do |item|
-    NanocRedirector::RedirectFrom.process(item, item.identifier.without_ext, @config)
+    NanocRedirector::RedirectFrom.process(item, item.identifier.without_ext)
   end
 end
 ```
+
+#### Configuration
+
+`RedirectFrom.process` takes an additional argument, `config`, which accepts two keys:
+
+* [`:output_dir`](https://nanoc.ws/doc/reference/config/#output_dir): the directory where files are written to
+* [`:index_filenames`](https://nanoc.ws/doc/reference/config/#index_filenames): a list of index filenames, i.e. names of files that will be served by a web server when a directory is requested.
 
 ### Redirect To filter
 

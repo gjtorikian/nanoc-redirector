@@ -27,4 +27,6 @@ doc/
 .DS_Store
 
 test/fixtures/output
+test/fixtures/somewhere
 test/fixtures/tmp
+test/fixtures/nanoc.yaml
