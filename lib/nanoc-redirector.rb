@@ -38,6 +38,8 @@ module NanocRedirector
 <title>Redirecting...</title>
 <link rel=canonical href="#{item_url}">
 <meta http-equiv=refresh content="0; url=#{item_url}">
+</head>
+<body>
 <h1>Redirecting...</h1>
 <a href="#{item_url}">Click here if you are not redirected.</a>
 <script>location='#{item_url}'</script>
