@@ -45,7 +45,6 @@ def with_site(params = {})
   output_dir = params[:output_dir] || 'output'
   index_filenames = params[:index_filenames] || ['index.html']
 
-
   # Create site
   FileUtils.mkdir_p(site_name)
   FileUtils.cd(site_name) do
@@ -61,8 +60,8 @@ def with_site(params = {})
     end
 
     config = STANDARD_CONFIG
-    config["output_dir"] = output_dir
-    config["index_filenames"] = index_filenames
+    config['output_dir'] = output_dir
+    config['index_filenames'] = index_filenames
     File.open('nanoc.yaml', 'w') do |io|
       io.write config.to_yaml
     end
@@ -70,6 +69,6 @@ def with_site(params = {})
 
   # Yield site
   FileUtils.cd(site_name) do
-    yield Nanoc::Int::SiteLoader.new.new_from_cwd
+    yield Nanoc::Core::SiteLoader.new.new_from_cwd
   end
 end

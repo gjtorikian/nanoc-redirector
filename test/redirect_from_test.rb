@@ -2,10 +2,9 @@ require 'test_helper'
 
 class RedirectFromTest < MiniTest::Test
   def test_it_renders_redirect_from_string
-    with_site(name: FIXTURES_DIR) do |site|
-
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+    with_site(name: FIXTURES_DIR) do |_|
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
 
       output_file = read_output_file('redirect_from', 'string')
       test_file = read_test_file('redirect_from', 'string')
@@ -18,10 +17,9 @@ class RedirectFromTest < MiniTest::Test
   end
 
   def test_it_renders_redirect_from_array
-    with_site(name: FIXTURES_DIR) do |site|
-
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+    with_site(name: FIXTURES_DIR) do |_|
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
 
       output_file = read_output_file('redirect_from', 'array')
       test_file = read_test_file('redirect_from', 'array')
@@ -31,16 +29,16 @@ class RedirectFromTest < MiniTest::Test
       output_file = read_output_file(['this-is-old'])
       assert_includes output_file, 'redirect_from/array'
 
-      assert test_output_file(['articles', 'this-is-older'])
-      output_file = read_output_file(['articles', 'this-is-older'])
+      assert test_output_file(%w[articles this-is-older])
+      output_file = read_output_file(%w[articles this-is-older])
       assert_includes output_file, 'redirect_from/array'
     end
   end
 
   def test_it_does_not_clobber_existing_files
-    with_site(name: FIXTURES_DIR) do |site|
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+    with_site(name: FIXTURES_DIR) do |_|
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
 
       output_file = read_output_file('redirect_from', 'existing-content')
       test_file = read_test_file('redirect_from', 'existing-content')
@@ -49,9 +47,9 @@ class RedirectFromTest < MiniTest::Test
   end
 
   def test_it_allows_redirects_from_content_directory_indexes
-    with_site(name: FIXTURES_DIR) do |site|
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+    with_site(name: FIXTURES_DIR) do |_|
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
 
       nested_redirect_file = read_output_file('redirect_from', 'nested')
       assert_includes nested_redirect_file, 'redirect_from/from-nested-root'
@@ -59,9 +57,9 @@ class RedirectFromTest < MiniTest::Test
   end
 
   def test_it_accepts_config_values
-    with_site(name: FIXTURES_DIR, output_dir: 'somewhere') do |site|
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+    with_site(name: FIXTURES_DIR, output_dir: 'somewhere') do |_|
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
 
       output_file = read_somewhere_file('redirect_from', 'string')
       test_file = read_test_file('redirect_from', 'string')
